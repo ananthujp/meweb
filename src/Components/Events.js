@@ -114,8 +114,13 @@ function Events() {
     <div className="flex flex-col py-10">
       <h1 className="my-1 font-bold text-xl">Events</h1>
       <div className="flex flex-wrap w-full overflow-x-auto mt-4 gap-6">
-        {Items.map((doc) => (
-          <EventsComp title={doc.title} date={doc.date} url={doc.url} />
+        {Items.map((doc, i) => (
+          <EventsComp
+            key={`Events.comp${i}`}
+            title={doc.title}
+            date={doc.date}
+            url={doc.url}
+          />
         ))}
       </div>
     </div>

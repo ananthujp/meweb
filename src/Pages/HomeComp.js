@@ -51,8 +51,9 @@ function HomeComp() {
           </Subtitle>
         </Wrapper>
       </Overlay> */}
-        {slides.map((doc) => (
+        {slides.map((doc, i) => (
           <Slide
+            key={`Home.slide${i}`}
             label={doc.title}
             background={{
               backgroundImageSrc: doc.src,

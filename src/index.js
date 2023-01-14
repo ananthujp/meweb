@@ -1,40 +1,49 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import {
-  createBrowserRouter,
+  createHashRouter,
   createRoutesFromElements,
+  Outlet,
   Route,
   RouterProvider,
-  Routes,
 } from "react-router-dom";
 import Navbar from "./Components/Navbar";
 import BottomBar from "./Components/BottomBar";
 import HomeComp from "./Pages/HomeComp";
+import GeneralComp from "./Pages/GeneralComp";
+import People from "./Pages/People";
 
-const router = createBrowserRouter(
-  //   [
-  //   {
-  //     path: "/",
-  //     element: <HomeComp />,
-  //   },
-  // ]
-  createRoutesFromElements(<Route path="/" element={<HomeComp />}></Route>)
-);
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
-  <React.StrictMode>
+const AppLayout = () => {
+  return (
     <div className="w-full h-screen flex flex-col justify-between bg-gray-50">
       <div className=" ">
         <Navbar />
         <div className="mt-24">
-          <RouterProvider router={router} />
+          <Outlet />
         </div>
       </div>
       <BottomBar />
     </div>
+  );
+};
+const router = createHashRouter(
+  createRoutesFromElements(
+    <>
+      <Route element={<AppLayout />}>
+        <Route path="/" element={<HomeComp />} />
+        <Route path="/pages/:title" element={<GeneralComp />} />
+        <Route path="/People/Faculty" element={<People id={1} />} />
+        <Route path="/People/PhD-Students" element={<People id={2} />} />
+      </Route>
+    </>
+  )
+);
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  <React.StrictMode>
+    <RouterProvider router={router}></RouterProvider>
   </React.StrictMode>
 );
 

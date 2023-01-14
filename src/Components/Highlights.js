@@ -38,8 +38,9 @@ function Highlights() {
     <div className="flex flex-col">
       <h1 className="my-1 font-bold text-xl">Highlights</h1>
       <div className="flex flex-row w-full overflow-x-auto mt-4">
-        {Items.map((doc) => (
+        {Items.map((doc, i) => (
           <HighlightComp
+            key={`highlights.comp${i}`}
             title={doc.title}
             img={doc.img}
             details={doc.details}
