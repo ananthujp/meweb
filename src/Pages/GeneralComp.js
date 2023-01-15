@@ -6,7 +6,6 @@ function GeneralComp() {
   const params = useParams();
   const n = Math.round(Math.random() * (imgList.length - 1 - 0) + 0);
   const imgSrc = imgList[n];
-  console.log(n, imgSrc);
 
   return (
     <div className="w-full flex flex-col -mt-2">

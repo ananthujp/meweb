@@ -1,7 +1,11 @@
+import { Cog6ToothIcon } from "@heroicons/react/24/outline";
 import React from "react";
 import { Link } from "react-router-dom";
+import useReducer from "../hooks/reducerHook";
 import logo from "../logo/iitgn.png";
+import Login from "./Login";
 function Navbar() {
+  const { overlay, setOverlay, user, setUser } = useReducer();
   const menu = [
     {
       name: "People",
@@ -46,6 +50,31 @@ function Navbar() {
       dropdown: [
         { name: "Prospective faculty", link: "ProspectiveFaculty" },
         { name: "Student", link: "Student" },
+      ],
+    },
+    {
+      name: (
+        <Cog6ToothIcon
+          onClick={() => setOverlay({ ...overlay, visible: true })}
+          className="w-5 h-5 my-auto text-gray-700 hover:bg-gray-100 rounded-full cursor-pointer"
+        />
+      ),
+      link: "",
+      dropdown: [
+        {
+          name: (
+            <div
+              onClick={() => setOverlay({ child: <Login />, visible: true })}
+            >
+              {!user ? "Login" : user.name}
+            </div>
+          ),
+          link: "",
+        },
+        {
+          name: user ? <div onClick={() => setUser(null)}>Logout</div> : "",
+          link: "",
+        },
       ],
     },
   ];
@@ -134,9 +163,11 @@ function Navbar() {
                       {doc.dropdown.map((dic, j) => (
                         <Link
                           to={
-                            dic.link.split("/").length > 1
-                              ? dic.link
-                              : "pages/" + doc.link + dic.link
+                            dic.link
+                              ? dic.link.split("/").length > 1
+                                ? dic.link
+                                : "pages/" + doc.link + dic.link
+                              : null
                           }
                           key={`navbar.drop${i + "," + j}`}
                           href="#"
@@ -150,68 +181,6 @@ function Navbar() {
                 )}
               </Link>
             ))}
-
-            {/* <div className="group px-4 mt-4">
-              <button
-                id="dropdownNavbarLink"
-                data-dropdown-toggle="dropdownNavbar"
-                className="text-gray-700 hover:bg-gray-50 border-b border-gray-100 md:hover:bg-transparent md:border-0 pl-3 pr-4 py-2 md:hover:text-blue-700 md:p-0 font-medium flex items-center justify-between w-full md:w-auto"
-              >
-                Dropdown
-                <svg
-                  className="w-4 h-4 ml-1"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  ></path>
-                </svg>
-              </button>
-
-              <div
-                id="dropdownNavbar"
-                className="absolute px-4 -ml-2 hidden group-hover:block bg-white text-base z-10 list-none divide-y divide-gray-100 rounded shadow my-4"
-              >
-                <ul className="py-1 " aria-labelledby="dropdownLargeButton">
-                  <li>
-                    <div
-                      href="#"
-                      className="text-sm hover:bg-gray-100 text-gray-700 block py-2"
-                    >
-                      Dashboard
-                    </div>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"
-                    >
-                      Settings
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"
-                    >
-                      Earnings
-                    </a>
-                  </li>
-                </ul>
-                <div className="py-1">
-                  <a
-                    href="#"
-                    className="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"
-                  >
-                    Sign out
-                  </a>
-                </div>
-              </div>
-            </div> */}
           </div>
         </div>
       </div>
