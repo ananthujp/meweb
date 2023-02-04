@@ -2,33 +2,30 @@ import React, { useEffect, useRef, useState } from "react";
 import { Button, Checkbox, Form, Input } from "antd";
 import useReducer from "../hooks/reducerHook";
 import { collection, getDocs, query, where } from "firebase/firestore";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+
 import { db } from "../firebase";
 import { message, notification } from "antd";
 function Login() {
   const FormData = useRef();
   //const { message, modal, notification } = App.useApp();
-
+  const auth = getAuth();
   const { setUser, setOverlay, overlay } = useReducer();
   const [loading, setLoad] = useState(false);
   const onFinish = () => {
-    setLoad(true);
+    //setLoad(true);
     const loginID = FormData.current.getFieldValue();
-    getDocs(
-      query(collection(db, "users"), where("username", "==", loginID.username))
-    ).then((doc) =>
-      //(doc) => console.log(doc.docs.length)
-      doc.docs.map((dic) => {
-        if (dic.data().password === loginID.password) {
-          setUser({ name: "superman" });
-          setOverlay({ ...overlay, visible: false });
-          message.success("Logged in successfully!");
-          setLoad(false);
-        } else {
-          console.log("Login Failed");
-          setLoad(false);
-        }
+    signInWithEmailAndPassword(auth, loginID.username, loginID.password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        setUser({ name: user.email });
+        setOverlay({ ...overlay, visible: false });
+        message.success("Logged in successfully!");
+        setLoad(false);
       })
-    );
+      .catch((err) => err && message.error(err.message));
+
     // if (loginID.username === "super" && loginID.password === "pass") {
     //   setUser({ name: "superman" });
     //   setOverlay({ ...overlay, visible: false });
@@ -36,14 +33,21 @@ function Login() {
     //   console.log("Login Failed");
     // }
   };
-
+  const layout = {
+    labelCol: {
+      span: 8,
+    },
+    wrapperCol: {
+      span: 16,
+    },
+  };
   return (
-    <div className="flex flex-col justify-between p-6">
-      <h1 className="mx-auto mb-4 font-semibold text-lg">Login</h1>
+    <div className="flex flex-col justify-between px-6">
       <Form
+        {...layout}
         name="basic"
-        labelCol={{ span: 0 }}
-        wrapperCol={{ span: 16 }}
+        // labelCol={{ span: 0 }}
+        // wrapperCol={{ span: 16 }}
         initialValues={{ remember: true }}
         onFinish={onFinish}
         ref={FormData}
@@ -84,7 +88,7 @@ function Login() {
             Cancel
           </Button>
           <Button loading={loading} htmlType="submit">
-            Submit
+            Login
           </Button>
         </Form.Item>
       </Form>

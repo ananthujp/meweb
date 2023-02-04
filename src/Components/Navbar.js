@@ -17,7 +17,68 @@ import { Link } from "react-router-dom";
 import useReducer from "../hooks/reducerHook";
 import logo from "../logo/iitgn.png";
 import Login from "./Login";
+import Register from "./Register";
 
+import { Tab } from "@headlessui/react";
+
+function classNames(...classes) {
+  return classes.filter(Boolean).join(" ");
+}
+const LogReg = () => {
+  let [categories] = useState({
+    Login: [
+      {
+        id: 1,
+        comp: <Login />,
+      },
+    ],
+    Register: [
+      {
+        id: 1,
+        comp: <Register />,
+      },
+    ],
+  });
+
+  return (
+    <div className="w-full max-w-md px-2 sm:px-0">
+      <Tab.Group>
+        <Tab.List className="flex space-x-1 rounded-t-xl bg-indigo-200/40 p-1">
+          {Object.keys(categories).map((category) => (
+            <Tab
+              key={category}
+              className={({ selected }) =>
+                classNames(
+                  "w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-gray-600",
+                  "ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2",
+                  selected
+                    ? "bg-white shadow"
+                    : " text-gray-800 hover:bg-white/[0.12] "
+                )
+              }
+            >
+              {category}
+            </Tab>
+          ))}
+        </Tab.List>
+
+        <Tab.Panels className="mt-2">
+          {Object.values(categories).map((posts, idx) => (
+            <Tab.Panel
+              key={idx}
+              className={classNames(
+                "rounded-xl bg-white p-3",
+                "ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2"
+              )}
+            >
+              {posts[0].comp}
+            </Tab.Panel>
+          ))}
+        </Tab.Panels>
+      </Tab.Group>
+    </div>
+  );
+};
 function Navbar() {
   const { setOverlay, user, setUser } = useReducer();
   var x = window.matchMedia("(min-width: 700px)");
@@ -66,7 +127,7 @@ function Navbar() {
       icon: <BriefcaseIcon className={iconTheme} />,
       link: "Placements+ ",
       dropdown: [
-        { name: "Industry", link: "Industry" },
+        { name: "Industry", link: "/Placements/Industry" },
         { name: "Academia", link: "Academia" },
       ],
     },
@@ -88,13 +149,14 @@ function Navbar() {
           name: (
             <div
               className="w-full"
-              onClick={() => setOverlay({ child: <Login />, visible: true })}
+              onClick={() => setOverlay({ child: <LogReg />, visible: true })}
             >
               {!user ? "Login" : user.name}
             </div>
           ),
           link: "",
         },
+
         {
           name: user ? (
             <div className="w-full" onClick={() => setUser(null)}>

@@ -9,17 +9,16 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
-import { Dialog, Transition } from '@headlessui/react'
-import { Fragment} from 'react'
+import { Dialog, Transition } from "@headlessui/react";
+import { Fragment } from "react";
 import Navbar from "./Components/Navbar";
 import BottomBar from "./Components/BottomBar";
 import HomeComp from "./Pages/HomeComp";
 import GeneralComp from "./Pages/GeneralComp";
 import People from "./Pages/People";
-import  { AuthProvider } from "./hooks/reducerHook";
+import { AuthProvider } from "./hooks/reducerHook";
 import OverlayScreen from "./Components/Overlay";
-
-
+import Placement from "./Pages/Placement";
 
 const AppLayout = () => {
   return (
@@ -45,6 +44,7 @@ const router = createHashRouter(
         <Route path="/pages/:title" element={<GeneralComp />} />
         <Route path="/People/Faculty" element={<People id={1} />} />
         <Route path="/People/PhD-Students" element={<People id={2} />} />
+        <Route path="/Placements/Industry" element={<Placement />} />
       </Route>
     </>
   )
