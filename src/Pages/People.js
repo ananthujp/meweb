@@ -11,14 +11,38 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState,Fragment } from "react";
 import { useParams } from "react-router-dom";
 import { db } from "../firebase";
 import useReducer from "../hooks/reducerHook";
 import { imgList } from "../Images";
-const ContactCard = ({ data, id, trash }) => {
+import { Dialog, Transition } from '@headlessui/react'
+
+
+const ContactCard = ({ data, id, trash,click }) => {
+  const { setOverlay} = useReducer();
+ const Content=()=>{return <div><img className="w-full h-36 object-cover" src={data.img} alt="" />
+ <div className="mx-4 text-left flex flex-col">
+   <h1 className="text-lg font-bold mt-4 text-blue-500">{data.name}</h1>
+   <h1 className="text-sm font-semibold">{data.grade}</h1>
+   <h1 className="text-sm font-thin">
+     <strong className="font-semibold">Research area : </strong>
+     {data.research}
+   </h1>
+   <h1 className="text-sm font-thin">
+     <strong className="font-semibold">Office NO : </strong>
+     {data.office}
+   </h1>
+   <h1 className="text-sm font-thin">
+     <strong className="font-semibold">Email id : </strong>
+     {data.email} -AT- iitgn.ac.in
+   </h1>
+   <a href={data.webUrl} className="text-sm mb-4">
+     Personal Webpage
+   </a>
+ </div></div>}
   return (
-    <div className="relative flex flex-col mx-auto w-3/5 md:w-64 overflow-hidden rounded-md shadow-md border border-gray-200">
+    <div onClick={()=>setOverlay({ child:<Content/> , visible: true })} className="relative cursor-pointer flex flex-col mx-auto w-3/5 md:w-64 overflow-hidden rounded-md shadow-md border border-gray-200">
       {trash && (
         <TrashIcon
           onClick={() =>
@@ -27,26 +51,7 @@ const ContactCard = ({ data, id, trash }) => {
           className="absolute text-red-500 w-5 z-5 hover:text-blue-400 rounded-full -mt-0 mr-2 top-2 right-0"
         />
       )}
-      <img className="w-full h-36 object-cover" src={data.img} alt="" />
-      <div className="mx-4 text-left flex flex-col">
-        <h1 className="text-lg font-bold mt-4 text-blue-500">{data.name}</h1>
-        <h1 className="text-sm font-semibold">{data.grade}</h1>
-        <h1 className="text-sm font-thin">
-          <strong className="font-semibold">Research area : </strong>
-          {data.research}
-        </h1>
-        <h1 className="text-sm font-thin">
-          <strong className="font-semibold">Office NO : </strong>
-          {data.office}
-        </h1>
-        <h1 className="text-sm font-thin">
-          <strong className="font-semibold">Email id : </strong>
-          {data.email} -AT- iitgn.ac.in
-        </h1>
-        <a href={data.webUrl} className="text-sm mb-4">
-          Personal Webpage
-        </a>
-      </div>
+      <Content/> 
     </div>
   );
 };
@@ -278,12 +283,13 @@ const AddUser = () => {
   );
 };
 function People({ id }) {
-  const params = useParams();
   const [data2, setData] = useState();
   const [data3, setData3] = useState();
   const n = Math.round(Math.random() * (imgList.length - 1 - 0) + 0);
   const imgSrc = imgList[n];
-  const { user } = useReducer();
+
+  const {  user } = useReducer();
+
   useEffect(() => {
     id === 1
       ? onSnapshot(
@@ -338,6 +344,7 @@ function People({ id }) {
   ];
   return (
     <div className="w-full flex flex-col -mt-2">
+
       <div className="relative text-center">
         <img
           src={imgSrc}
@@ -353,6 +360,7 @@ function People({ id }) {
         {id === 1
           ? data2?.map((doc) => (
               <ContactCard
+              
                 data={doc.data}
                 id={doc.id}
                 key={`$key{doc.id}`}

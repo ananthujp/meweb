@@ -3,9 +3,12 @@ import { Button, Checkbox, Form, Input } from "antd";
 import useReducer from "../hooks/reducerHook";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase";
+import { message, notification } from "antd";
 function Login() {
   const FormData = useRef();
-  const { user, setUser, setOverlay, overlay } = useReducer();
+  //const { message, modal, notification } = App.useApp();
+
+  const { setUser, setOverlay, overlay } = useReducer();
   const [loading, setLoad] = useState(false);
   const onFinish = () => {
     setLoad(true);
@@ -18,6 +21,7 @@ function Login() {
         if (dic.data().password === loginID.password) {
           setUser({ name: "superman" });
           setOverlay({ ...overlay, visible: false });
+          message.success("Logged in successfully!");
           setLoad(false);
         } else {
           console.log("Login Failed");
@@ -34,8 +38,8 @@ function Login() {
   };
 
   return (
-    <div className="flex flex-col justify-between">
-      <h1 className="mx-auto mb-4">Login</h1>
+    <div className="flex flex-col justify-between p-6">
+      <h1 className="mx-auto mb-4 font-semibold text-lg">Login</h1>
       <Form
         name="basic"
         labelCol={{ span: 0 }}
@@ -71,7 +75,14 @@ function Login() {
           <Checkbox>Remember me</Checkbox>
         </Form.Item>
 
-        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+        <Form.Item wrapperCol={{ offset: 8 }}>
+          <Button
+            onClick={() => setOverlay({ ...overlay, visible: false })}
+            className="mr-2"
+            danger
+          >
+            Cancel
+          </Button>
           <Button loading={loading} htmlType="submit">
             Submit
           </Button>

@@ -66,10 +66,21 @@ const EventsComp = ({ date, url, title }) => {
   };
   return (
     <div className="p-5 w-[45%] flex flex-row gap-4 bg-white shadow-md rounded-lg">
-      <div className="transform scale-75 flex items-start w-1/4">
+      {/* <div className="transform scale-75 flex items-start w-1/4">
         <ThemeProvider theme={theme}>
           <CalendarIcon date={date} options={dateOptions} />
         </ThemeProvider>
+      </div> */}
+      <div className="h-full min-w-32 w-24 flex flex-col rounded-md overflow-hidden">
+        <div className="text-center bg-red-400 text-white text-sm">
+          {date.toString().slice(4, 7)}
+        </div>
+        <div className="text-center bg-slate-50 text-3xl my-2">
+          {date.toString().slice(9, 11)}
+        </div>
+        <div className="text-center bg-red-400 text-white text-xs">
+          {20 + "" + date.toString().slice(13, 15)}
+        </div>
       </div>
       <div className="flex gap-1 flex-col w-[65%]">
         <h1 className="flex flex-row text-xs text-gray-400">
